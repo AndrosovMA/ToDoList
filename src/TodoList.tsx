@@ -1,9 +1,10 @@
 import React from "react";
-import {TasksType} from "./App";
+import {FilterValueType, TasksType} from "./App";
 
 type Props = {
     tasks: TasksType;
     removeTask: (id: number) => void;
+    changeFilter: (value:FilterValueType) => void;
 }
 
 export function TodoList(props: Props) {
@@ -27,9 +28,9 @@ export function TodoList(props: Props) {
                 }
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={ () => {props.changeFilter('All')} }>All</button>
+                <button onClick={ () => {props.changeFilter('Active')} }>Active</button>
+                <button onClick={ () => {props.changeFilter('Completed')} }>Completed</button>
             </div>
         </div>
     )
