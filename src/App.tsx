@@ -43,7 +43,7 @@ function App() {
         {id: idTodoList_2, task: 'My project', filter: 'Active'},
     ])
 
-    const addTask = (tittle: string, id:string) => {
+    const addTask = (tittle: string, id: string) => {
         let newTask = {
             id: v1(),
             title: tittle,
@@ -52,7 +52,7 @@ function App() {
         tasks[id] = [newTask, ...tasks[id]]
         setTask({...tasks});
     }
-    const removeTask = (idList:string, idTask: string) => {
+    const removeTask = (idList: string, idTask: string) => {
         tasks[idList] = tasks[idList].filter((el) => el.id !== idTask);
         setTask({...tasks});
     }
@@ -63,19 +63,25 @@ function App() {
             setTodoLists([...todoLists]);
         }
     }
-    const changeStatusTask = (idList:string, id: string, isDone: boolean) => {
+    const changeStatusTask = (idList: string, id: string, isDone: boolean) => {
         let copyTasks = tasks[idList].find(el => el.id === id)
         if (copyTasks) {
             copyTasks.isDone = isDone;
         }
         setTask({...tasks})
     }
+    const deleteTodoList = (id: string) => {
+        let todoList = todoLists.filter(el => el.id !== id);
+        setTodoLists(todoList);
+        delete tasks[id];
+        setTask(tasks);
+    }
 
     return (
         <div className="App">
             {
                 todoLists.map((el) => {
-                    let tasksForTodoList:TasksType = tasks[el.id];
+                    let tasksForTodoList: TasksType = tasks[el.id];
                     if (el.filter === 'Active') {
                         tasksForTodoList = tasks[el.id].filter((el) => !el.isDone);
                     }
@@ -94,6 +100,7 @@ function App() {
                             addTask={addTask}
                             changeStatusTask={changeStatusTask}
                             filter={el.filter}
+                            deleteTodoList={deleteTodoList}
                         />
                     )
                 })
