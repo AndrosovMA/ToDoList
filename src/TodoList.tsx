@@ -1,45 +1,22 @@
-import React, {ChangeEvent, useState} from "react";
+import React, {ChangeEvent} from "react";
 import {FilterValueType, TasksType} from "./App";
 import {v1} from "uuid";
+import {AddItemForm} from "./AddItemForm";
 
 type Props = {
-    id:string
+    id: string
     taskName: string
     tasks: TasksType
-    removeTask: (idList:string, idTask: string) => void
+    removeTask: (idList: string, idTask: string) => void
     changeFilter: (value: FilterValueType, id: string) => void
-    addTask: (tittle: string, id:string) => void
-    changeStatusTask: (idList:string, idTask: string, isDone: boolean) => void
+    addTask: (tittle: string, id: string) => void
+    changeStatusTask: (idList: string, idTask: string, isDone: boolean) => void
     filter: FilterValueType
-    deleteTodoList: (id: string)=> void
+    deleteTodoList: (id: string) => void
 }
 
 export function TodoList(props: Props) {
-    const [newTaskTittle, setNewTaskTittle] = useState('');
-    const [errorInput, setErrorInput] = useState<null | string>(null);
 
-    const inputTextHandler = (e: React.FormEvent<HTMLInputElement>) => {
-        setErrorInput(null)
-        setNewTaskTittle(e.currentTarget.value);
-    };
-    const addTaskByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-        if (newTaskTittle.trim() === '') {
-            setErrorInput('error')
-            return
-        }
-        if (e.key === 'Enter') {
-            props.addTask(newTaskTittle.trim(), props.id);
-            setNewTaskTittle('')
-        }
-    };
-    const addTaskByButton = () => {
-        if (newTaskTittle.trim() === '') {
-            setErrorInput('error')
-            return
-        }
-        props.addTask(newTaskTittle.trim(), props.id);
-        setNewTaskTittle('')
-    }
     const allClickHandler = () => {
         props.changeFilter('All', props.id)
     };
@@ -52,20 +29,18 @@ export function TodoList(props: Props) {
     const handlerDeleteTodoList = () => {
         props.deleteTodoList(props.id)
     }
-
+    const addTask = (title: string) => {
+        props.addTask(title, props.id)
+    } // обертка над props.addTask что бы не передавать id
 
     return (
         <div>
-            <h3>{props.taskName} <button onClick={handlerDeleteTodoList}>X</button></h3>
+            <h3>{props.taskName}
+                <button onClick={handlerDeleteTodoList}>X</button>
+            </h3>
 
-            <div>
-                <input placeholder='указать новую задачу' value={newTaskTittle}
-                       className={errorInput ? errorInput : ''}
-                       onChange={inputTextHandler}
-                       onKeyPress={addTaskByEnter}/>
-                <button onClick={addTaskByButton}>+</button>
-                {errorInput && <div className="error_message">tittle is required</div>}
-            </div>
+            <AddItemForm addItem={addTask}/>
+
             <ul>
                 {
                     props.tasks.map((el) => {
@@ -84,6 +59,7 @@ export function TodoList(props: Props) {
                     })
                 }
             </ul>
+
             <div>
                 <button className={props.filter === 'All' ? 'active_filter' : ''}
                         onClick={allClickHandler}>All
@@ -98,3 +74,5 @@ export function TodoList(props: Props) {
         </div>
     )
 }
+
+

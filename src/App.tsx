@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
 import {v1} from "uuid";
+import {AddItemForm} from "./AddItemForm";
 
 export type TaskType = {
     id: string,
@@ -79,6 +80,11 @@ function App() {
 
     return (
         <div className="App">
+            <div>
+                <div> <h3>New to do list</h3> </div>
+                <AddItemForm addItem={(title: string)=>{alert(title)}} />
+            </div>
+
             {
                 todoLists.map((el) => {
                     let tasksForTodoList: TasksType = tasks[el.id];
