@@ -12,7 +12,6 @@ export type TaskType = {
 export type TasksType = Array<TaskType>;
 export type TasksTypeObject = {
     [idTodoList: string]: TasksType
-
 }
 
 export type FilterValueType = "All" | "Active" | "Completed";
@@ -77,12 +76,21 @@ function App() {
         delete tasks[id];
         setTask(tasks);
     }
+    const addTodoList = (title:string) => {
+        let todoList:TodoListType = {
+            id: v1(),
+            task: title,
+            filter: 'All'
+        };
+        setTodoLists([todoList, ...todoLists]);
+        setTask({[todoList.id]: [], ...tasks})
+    }
 
     return (
         <div className="App">
             <div>
                 <div> <h3>New to do list</h3> </div>
-                <AddItemForm addItem={(title: string)=>{alert(title)}} />
+                <AddItemForm addItem={addTodoList}/>
             </div>
 
             {
