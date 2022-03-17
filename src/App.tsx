@@ -21,7 +21,6 @@ export type TodoListType = {
     filter: FilterValueType
 }
 
-
 function App() {
     const idTodoList_1: string = v1();
     const idTodoList_2: string = v1();
@@ -76,8 +75,8 @@ function App() {
         delete tasks[id];
         setTask(tasks);
     }
-    const addTodoList = (title:string) => {
-        let todoList:TodoListType = {
+    const addTodoList = (title: string) => {
+        let todoList: TodoListType = {
             id: v1(),
             task: title,
             filter: 'All'
@@ -85,11 +84,27 @@ function App() {
         setTodoLists([todoList, ...todoLists]);
         setTask({[todoList.id]: [], ...tasks})
     }
+    const editableTitleTaskHandler = (idTodoList: string, idTask: string, value: string) => {
+        return tasks[idTodoList].filter((el) => {
+            if (el.id === idTask) {
+                el.title = value
+                setTask({...tasks});
+            }
+        })
+    }
+    const editableTitleHeaderHandler = (idTodoList: string, value: string) => {
+        return todoLists.filter((el) => {
+            if (el.id === idTodoList) {
+                el.task = value;
+                setTodoLists([...todoLists])
+            }
+        })
+    }
 
     return (
         <div className="App">
             <div>
-                <div> <h3>New to do list</h3> </div>
+                <div><h3>New to do list</h3></div>
                 <AddItemForm addItem={addTodoList}/>
             </div>
 
@@ -115,6 +130,8 @@ function App() {
                             changeStatusTask={changeStatusTask}
                             filter={el.filter}
                             deleteTodoList={deleteTodoList}
+                            editableTitleTaskHandler={editableTitleTaskHandler}
+                            editableTitleHeaderHandler={editableTitleHeaderHandler}
                         />
                     )
                 })
