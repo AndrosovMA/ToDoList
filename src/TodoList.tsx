@@ -4,6 +4,11 @@ import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import {EditableTitle} from "./EditableTitle";
 
+/** Material UI*/
+import {Button, Checkbox, IconButton} from "@mui/material";
+import {Delete, BookmarkBorder, Bookmark, DeleteForever} from '@mui/icons-material';
+const label = {inputProps: {'aria-label': 'Checkbox demo'}};
+
 type Props = {
     id: string
     taskName: string
@@ -35,22 +40,26 @@ export function TodoList(props: Props) {
     const addTask = (title: string) => {
         props.addTask(title, props.id)
     } // обертка над props.addTask что бы не передавать id
-    const editableTitleHeader = (value: string)=> {
+    const editableTitleHeader = (value: string) => {
         props.editableTitleHeaderHandler(props.id, value);
     }
 
     return (
         <div>
+            {/**Title to do list*/}
             <h3>
-                {/*<span>{props.taskName}</span>*/}
                 <EditableTitle title={props.taskName}
-                               editableTitleValue={editableTitleHeader}/>
-
-                <button onClick={handlerDeleteTodoList}>X</button>
+                               editableTitleValue={editableTitleHeader}
+                />
+                <IconButton aria-label="delete" onClick={handlerDeleteTodoList} color="primary">
+                    <DeleteForever/>
+                </IconButton>
             </h3>
 
+            {/**Add new task*/}
             <AddItemForm addItem={addTask}/>
 
+            {/**All tasks*/}
             <ul>
                 {
                     props.tasks.map((el) => {
@@ -64,26 +73,36 @@ export function TodoList(props: Props) {
                             props.editableTitleTaskHandler(props.id, el.id, value)
                         }
 
-                        return <li key={v1()}>
-                            <input type="checkbox" checked={el.isDone} onChange={onChangeCheckbox}/>
-                            <EditableTitle title={el.title}
-                                           editableTitleValue={editableTitleTask}/>
-                            <button onClick={onRemoveTask}>x</button>
-                        </li>
+                        return (
+                            <li key={v1()}>
+                                <Checkbox {...label} checked={el.isDone}
+                                          onChange={onChangeCheckbox}
+                                          icon={<BookmarkBorder/>}
+                                          checkedIcon={<Bookmark/>}/>
+
+                                <EditableTitle title={el.title}
+                                               editableTitleValue={editableTitleTask}/>
+
+                                <IconButton aria-label="delete" onClick={onRemoveTask}>
+                                    <Delete/>
+                                </IconButton>
+                            </li>)
                     })
                 }
             </ul>
 
+            {/**Buttons for filter tasks*/}
             <div>
-                <button className={props.filter === 'All' ? 'active_filter' : ''}
+                <Button color={"info"} variant={props.filter === 'All' ? 'contained' : 'text'}
                         onClick={allClickHandler}>All
-                </button>
-                <button className={props.filter === 'Active' ? 'active_filter' : ''}
+                </Button>
+                <Button color={"secondary"} variant={props.filter === 'Active' ? 'contained' : 'text'}
                         onClick={activeClickHandler}>Active
-                </button>
-                <button className={props.filter === 'Completed' ? 'active_filter' : ''}
+                </Button>
+                <Button color={"success"} variant={props.filter === 'Completed' ? 'contained' : 'text'}
                         onClick={completedClickHandler}>Completed
-                </button>
+                </Button>
+
             </div>
         </div>
     )

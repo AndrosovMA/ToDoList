@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from "react";
+import {Input} from "@mui/material";
 
 type EditableTitleProps = {
     title: string
@@ -30,7 +31,7 @@ export function EditableTitle(props: EditableTitleProps) {
     return (
         <>
             {editMode
-                ? <input value={editTitle}
+                ? <Input value={editTitle}
                          onBlur={turnOfInputHandler}
                          autoFocus={true}
                          onChange={inputHandler}
