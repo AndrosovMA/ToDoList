@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
-import {v1} from "uuid";
+import {v1} from 'uuid';
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from '@mui/icons-material';
@@ -56,13 +56,6 @@ function App() {
         tasks[idList] = tasks[idList].filter((el) => el.id !== idTask);
         setTask({...tasks});
     }
-    const changeFilter = (value: FilterValueType, id: string) => {
-        let todoList = todoLists.find((el: TodoListType) => el.id === id);
-        if (todoList) {
-            todoList.filter = value;
-            setTodoLists([...todoLists]);
-        }
-    }
     const changeStatusTask = (idList: string, id: string, isDone: boolean) => {
         let copyTasks = tasks[idList].find(el => el.id === id)
         if (copyTasks) {
@@ -70,12 +63,15 @@ function App() {
         }
         setTask({...tasks})
     }
-    const deleteTodoList = (id: string) => {
-        let todoList = todoLists.filter(el => el.id !== id);
-        setTodoLists(todoList);
-        delete tasks[id];
-        setTask(tasks);
+    const editableTitleTaskHandler = (idTodoList: string, idTask: string, value: string) => {
+        return tasks[idTodoList].filter((el) => {
+            if (el.id === idTask) {
+                el.title = value
+                setTask({...tasks});
+            }
+        })
     }
+
     const addTodoList = (title: string) => {
         let todoList: TodoListType = {
             id: v1(),
@@ -85,13 +81,18 @@ function App() {
         setTodoLists([todoList, ...todoLists]);
         setTask({[todoList.id]: [], ...tasks})
     }
-    const editableTitleTaskHandler = (idTodoList: string, idTask: string, value: string) => {
-        return tasks[idTodoList].filter((el) => {
-            if (el.id === idTask) {
-                el.title = value
-                setTask({...tasks});
-            }
-        })
+    const deleteTodoList = (id: string) => {
+        let todoList = todoLists.filter(el => el.id !== id);
+        setTodoLists(todoList);
+        delete tasks[id];
+        setTask(tasks);
+    }
+    const changeFilter = (value: FilterValueType, id: string) => {
+        let todoList = todoLists.find((el: TodoListType) => el.id === id);
+        if (todoList) {
+            todoList.filter = value;
+            setTodoLists([...todoLists]);
+        }
     }
     const editableTitleHeaderHandler = (idTodoList: string, value: string) => {
         return todoLists.filter((el) => {
@@ -123,7 +124,7 @@ function App() {
                 </Toolbar>
             </AppBar>
 
-            <Container maxWidth="md">
+            <Container maxWidth="xl">
                 <Grid container style={{padding: "10px 20px 20px 0"}}>
                     {/**Form for add new to do list*/}
                     <div>
