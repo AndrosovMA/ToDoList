@@ -5,6 +5,14 @@ import {v1} from 'uuid';
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from '@mui/icons-material';
+import {
+    addTodoListAC,
+    changeFilterAC,
+    deleteTodoListAC,
+    editTitleTodoListAC,
+    toDoListReducer
+} from "./state/toDoList-reducer";
+import {addTaskAC, changeStatusTaskAC, editableTitleTaskAC, removeTaskAC, taskReducer} from "./state/task-reducer";
 
 export type TaskType = {
     id: string,
@@ -26,7 +34,7 @@ function App() {
     const idTodoList_1: string = v1();
     const idTodoList_2: string = v1();
 
-    const [tasks, setTask] = useState<TasksTypeObject>({
+    const [tasks, dispatchTask] = useReducer(taskReducer, {
         [idTodoList_1]: [
             {id: v1(), title: 'JS', isDone: true},
             {id: v1(), title: 'TS', isDone: false},
@@ -38,69 +46,44 @@ function App() {
             {id: v1(), title: 'TodoList', isDone: false},
         ],
     });
-    const [todoLists, setTodoLists] = useState<Array<TodoListType>>([
+    const [todoLists, dispatchTodoList] = useReducer(toDoListReducer, [
         {id: idTodoList_1, task: 'What to learn', filter: 'All'},
         {id: idTodoList_2, task: 'My project', filter: 'Active'},
     ])
 
-    const addTask = (tittle: string, id: string) => {
-        let newTask = {
-            id: v1(),
-            title: tittle,
-            isDone: false
-        }
-        tasks[id] = [newTask, ...tasks[id]]
-        setTask({...tasks});
+    const addTask = (title: string, id: string) => {
+        const action = addTaskAC(id, title)
+        dispatchTask(action);
     }
     const removeTask = (idList: string, idTask: string) => {
-        tasks[idList] = tasks[idList].filter((el) => el.id !== idTask);
-        setTask({...tasks});
+        const action = removeTaskAC(idList, idTask);
+        dispatchTask(action);
     }
     const changeStatusTask = (idList: string, id: string, isDone: boolean) => {
-        let copyTasks = tasks[idList].find(el => el.id === id)
-        if (copyTasks) {
-            copyTasks.isDone = isDone;
-        }
-        setTask({...tasks})
+        const action = changeStatusTaskAC(idList, id, isDone);
+        dispatchTask(action);
     }
     const editableTitleTaskHandler = (idTodoList: string, idTask: string, value: string) => {
-        return tasks[idTodoList].filter((el) => {
-            if (el.id === idTask) {
-                el.title = value
-                setTask({...tasks});
-            }
-        })
+        const action = editableTitleTaskAC(idTodoList, idTask, value);
+        dispatchTask(action);
     }
 
     const addTodoList = (title: string) => {
-        let todoList: TodoListType = {
-            id: v1(),
-            task: title,
-            filter: 'All'
-        };
-        setTodoLists([todoList, ...todoLists]);
-        setTask({[todoList.id]: [], ...tasks})
+        const action = addTodoListAC(title);
+        dispatchTodoList(action);
+        dispatchTask(action);
     }
     const deleteTodoList = (id: string) => {
-        let todoList = todoLists.filter(el => el.id !== id);
-        setTodoLists(todoList);
-        delete tasks[id];
-        setTask(tasks);
+        const action = deleteTodoListAC(id);
+        dispatchTodoList(action);
     }
     const changeFilter = (value: FilterValueType, id: string) => {
-        let todoList = todoLists.find((el: TodoListType) => el.id === id);
-        if (todoList) {
-            todoList.filter = value;
-            setTodoLists([...todoLists]);
-        }
+        const action = changeFilterAC(id, value);
+        dispatchTodoList(action);
     }
     const editableTitleHeaderHandler = (idTodoList: string, value: string) => {
-        return todoLists.filter((el) => {
-            if (el.id === idTodoList) {
-                el.task = value;
-                setTodoLists([...todoLists])
-            }
-        })
+        const action = editTitleTodoListAC(idTodoList, value);
+        dispatchTodoList(action);
     }
 
     return (
