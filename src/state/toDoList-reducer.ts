@@ -3,11 +3,12 @@ import {v1} from "uuid";
 /** Type*/
 import {FilterValueType, TodoListType} from "../App";
 
-type AddTodoListActionType = {
-    type: 'ADD-TODO-LIST',
+export type AddTodoListActionType = {
+    type: 'ADD-TODO-LIST'
     title: string
+    idTodoList: string
 }
-type DeleteTodoListActionType = {
+export type DeleteTodoListActionType = {
     type: 'DELETE-TODO-LIST',
     id: string,
 }
@@ -24,17 +25,17 @@ type EditTitleTodoListActionType = {
 type ActionTypes = AddTodoListActionType | DeleteTodoListActionType | ChangeFilterActionType | EditTitleTodoListActionType
 
 
-export const toDoListReducer = (state: Array<TodoListType>, action: ActionTypes) => {
+//Reducer должын вернуть такой же тип какой и получил
+export const toDoListReducer = (state: Array<TodoListType>, action: ActionTypes): Array<TodoListType> => {
     switch (action.type) {
         case 'ADD-TODO-LIST': {
-            let todoList = {
-                id: v1(),
-                task: action.title,
-                filter: 'All'
-            }
             return [
+                {
+                    id: action.idTodoList,
+                    task: action.title,
+                    filter: 'All'
+                },
                 ...state,
-                todoList
             ]
         }
         case 'DELETE-TODO-LIST': {
@@ -63,7 +64,8 @@ export const toDoListReducer = (state: Array<TodoListType>, action: ActionTypes)
 export const addTodoListAC = (value: string):AddTodoListActionType => {
     return {
         type:'ADD-TODO-LIST',
-        title: value
+        title: value,
+        idTodoList: v1()
     }
 }
 export const deleteTodoListAC = (id: string):DeleteTodoListActionType => {
