@@ -36,8 +36,7 @@ export function EditableTitle(props: EditableTitleProps) {
                          autoFocus={true}
                          onChange={inputHandler}
                          onKeyPress={turnOfByEnterInputHandler}/>
-                : <span onDoubleClick={turnOnSpanHandler}
-                >{props.title}</span>}
+                : <span onDoubleClick={turnOnSpanHandler}>{props.title}</span>}
         </>
     )
 }
