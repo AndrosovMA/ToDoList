@@ -25,8 +25,16 @@ type EditTitleTodoListActionType = {
 type ActionTypes = AddTodoListActionType | DeleteTodoListActionType | ChangeFilterActionType | EditTitleTodoListActionType
 
 
+export const idTodoList_1: string = v1();
+export const idTodoList_2: string = v1();
+
+const initialState:Array<TodoListType> = [
+    {id: idTodoList_1, task: 'What to learn', filter: 'All'},
+    {id: idTodoList_2, task: 'My project', filter: 'Active'},
+];
+
 //Reducer должын вернуть такой же тип какой и получил
-export const toDoListReducer = (state: Array<TodoListType>, action: ActionTypes): Array<TodoListType> => {
+export const toDoListReducer = (state: Array<TodoListType> = initialState, action: ActionTypes): Array<TodoListType> => {
     switch (action.type) {
         case 'ADD-TODO-LIST': {
             return [
@@ -56,7 +64,7 @@ export const toDoListReducer = (state: Array<TodoListType>, action: ActionTypes)
             return [...state];
         }
         default:
-            throw new Error("I don't understand this action")
+            return state;
     }
 }
 
