@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
 import {v1} from 'uuid';
@@ -8,6 +8,7 @@ import {Menu} from '@mui/icons-material';
 import {addTodoListAC, changeFilterAC, deleteTodoListAC, editTitleTodoListAC} from "./state/toDoList-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./state/store";
+import {AsyncHomeWork} from "./AsyncHomeWork";
 
 export type TaskType = {
     id: string,
@@ -25,30 +26,34 @@ export type TodoListType = {
     filter: FilterValueType
 }
 
+function AppWithRedux() {
+    console.log('app is called');
 
-function App() {
     const dispatch = useDispatch();
     const todoLists = useSelector<AppStateType, Array<TodoListType>>((state) => state.toDoListReducer);
 
-    const addTodoList = (title: string) => {
+    const addTodoList = useCallback((title: string) => {
         const action = addTodoListAC(title);
         dispatch(action);
-    }
-    const deleteTodoList = (id: string) => {
+    }, [dispatch]);
+    const deleteTodoList = useCallback((id: string) => {
         const action = deleteTodoListAC(id);
         dispatch(action);
-    }
-    const changeFilter = (value: FilterValueType, id: string) => {
+    }, [dispatch]);
+    const changeFilter = useCallback( (value: FilterValueType, id: string) => {
         const action = changeFilterAC(id, value);
         dispatch(action);
-    }
-    const editableTitleHeaderHandler = (idTodoList: string, value: string) => {
+    }, [dispatch])
+    const editableTitleHeaderHandler = useCallback ((idTodoList: string, value: string) => {
         const action = editTitleTodoListAC(idTodoList, value);
         dispatch(action);
-    }
+    },[dispatch]);
 
     return (
         <div className="App">
+            <AsyncHomeWork/>
+
+
             {/**Header App bar with burger menu*/}
             <AppBar position="static">
                 <Toolbar>
@@ -69,23 +74,25 @@ function App() {
             </AppBar>
 
             <Container maxWidth="xl">
+                {/**Form for add new to do list*/}
                 <Grid container style={{padding: "10px 20px 20px 0"}} key={v1()}>
-                    {/**Form for add new to do list*/}
+
                     <div>
                         <div><h3>Create new to do list</h3></div>
                         <AddItemForm addItem={addTodoList}/>
                     </div>
                 </Grid>
+
+                {/**render todoLists*/}
                 <Grid container spacing={3} key={v1()}>
-                    {/**render todoLists*/}
+
                     {
                         todoLists.map((el) => {
 
                             return (
-                                <Grid item key={v1()}>
+                                <Grid item key={el.id}>
                                     <Paper elevation={3} style={{padding: "20px"}}>
                                         <TodoList
-                                            key={v1()}
                                             id={el.id}
                                             taskName={el.task}
                                             changeFilter={changeFilter}
@@ -105,7 +112,7 @@ function App() {
     );
 }
 
-export default App;
+export default AppWithRedux;
 
 
 

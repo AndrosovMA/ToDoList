@@ -30,7 +30,7 @@ export const idTodoList_2: string = v1();
 
 const initialState:Array<TodoListType> = [
     {id: idTodoList_1, task: 'What to learn', filter: 'All'},
-    {id: idTodoList_2, task: 'My project', filter: 'Active'},
+    {id: idTodoList_2, task: 'My project', filter: 'All'},
 ];
 
 //Reducer должын вернуть такой же тип какой и получил

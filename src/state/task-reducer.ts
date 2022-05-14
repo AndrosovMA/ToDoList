@@ -34,7 +34,7 @@ type actionType =
     | AddTodoListActionType
     | DeleteTodoListActionType
 
-const initialState:TasksTypeObject = {
+const initialState: TasksTypeObject = {
     [idTodoList_1]: [
         {id: v1(), title: 'JS', isDone: true},
         {id: v1(), title: 'TS', isDone: false},
@@ -68,22 +68,20 @@ export const taskReducer = (state: TasksTypeObject = initialState, action: actio
                 [action.idTodoList]: state[action.idTodoList].filter(el => el.id !== action.idTask)
             }
         case 'CHANGE-STATUS': {
-            const stateCopy = {...state};
-            const tasks = stateCopy[action.idTodoList]
-            const task = tasks.find(el => el.id === action.idTask);
-            if (task) {
-                task.isDone = action.isDone
-            }
-            return stateCopy;
+            let todoListTask = state[action.idTodoList];
+            state[action.idTodoList] = todoListTask
+                .map(t => t.id === action.idTask
+                    ? {...t, isDone: action.isDone}
+                    : t);
+            return ({...state})
         }
         case 'EDITABLE-TASK-TITLE': {
-            const stateCopy = {...state};
-            const tasks = stateCopy[action.idTodoList]
-            const task = tasks.find(el => el.id === action.idTask);
-            if (task) {
-                task.title = action.title
-            }
-            return stateCopy;
+           let todoListTask = state[action.idTodoList];
+            state[action.idTodoList] = todoListTask
+                .map(t => t.id === action.idTask
+                    ? {...t, title: action.title}
+                    : t);
+            return ({...state})
         }
         case 'ADD-TODO-LIST':
             return {
