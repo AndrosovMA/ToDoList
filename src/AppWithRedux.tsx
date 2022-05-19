@@ -8,7 +8,6 @@ import {Menu} from '@mui/icons-material';
 import {addTodoListAC, changeFilterAC, deleteTodoListAC, editTitleTodoListAC} from "./state/toDoList-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./state/store";
-import {AsyncHomeWork} from "./AsyncHomeWork";
 
 export type TaskType = {
     id: string,
@@ -27,7 +26,6 @@ export type TodoListType = {
 }
 
 function AppWithRedux() {
-    console.log('app is called');
 
     const dispatch = useDispatch();
     const todoLists = useSelector<AppStateType, Array<TodoListType>>((state) => state.toDoListReducer);
@@ -40,19 +38,17 @@ function AppWithRedux() {
         const action = deleteTodoListAC(id);
         dispatch(action);
     }, [dispatch]);
-    const changeFilter = useCallback( (value: FilterValueType, id: string) => {
+    const changeFilter = useCallback((value: FilterValueType, id: string) => {
         const action = changeFilterAC(id, value);
         dispatch(action);
     }, [dispatch])
-    const editableTitleHeaderHandler = useCallback ((idTodoList: string, value: string) => {
+    const editableTitleHeaderHandler = useCallback((idTodoList: string, value: string) => {
         const action = editTitleTodoListAC(idTodoList, value);
         dispatch(action);
-    },[dispatch]);
+    }, [dispatch]);
 
     return (
         <div className="App">
-            <AsyncHomeWork/>
-
 
             {/**Header App bar with burger menu*/}
             <AppBar position="static">

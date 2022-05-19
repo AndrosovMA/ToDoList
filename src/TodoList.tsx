@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo} from "react";
+import React, {useCallback} from "react";
 import {FilterValueType, TasksType, TasksTypeObject} from "./AppWithRedux";
 import {AddItemForm} from "./AddItemForm";
 import {EditableTitle} from "./EditableTitle";
@@ -18,13 +18,10 @@ type PropsType = {
     filter: FilterValueType
     deleteTodoList: (id: string) => void
     editableTitleHeaderHandler: (idTodoList: string, value: string) => void
-
 }
 
 export const TodoList = React.memo((props: PropsType) => {
     const {id, taskName, changeFilter, filter, deleteTodoList, editableTitleHeaderHandler} = props;
-
-    console.log('to do list is called')
 
     const dispatch = useDispatch();
     const tasks = useSelector<AppStateType, TasksTypeObject>((state) => state.taskReducer)

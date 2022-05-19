@@ -1,6 +1,6 @@
 import {TasksTypeObject} from "../AppWithRedux";
 import {v1} from "uuid";
-import {AddTodoListActionType, DeleteTodoListActionType, idTodoList_1, idTodoList_2} from "./toDoList-reducer";
+import {AddTodoListActionType, DeleteTodoListActionType} from "./toDoList-reducer";
 
 
 type addTaskType = {
@@ -34,18 +34,7 @@ type actionType =
     | AddTodoListActionType
     | DeleteTodoListActionType
 
-const initialState: TasksTypeObject = {
-    [idTodoList_1]: [
-        {id: v1(), title: 'JS', isDone: true},
-        {id: v1(), title: 'TS', isDone: false},
-        {id: v1(), title: 'React', isDone: true},
-        {id: v1(), title: 'Redux', isDone: false},
-    ],
-    [idTodoList_2]: [
-        {id: v1(), title: 'SocialNetwork', isDone: true},
-        {id: v1(), title: 'TodoList', isDone: false},
-    ],
-}
+const initialState: TasksTypeObject = {}
 
 export const taskReducer = (state: TasksTypeObject = initialState, action: actionType): TasksTypeObject => {
     switch (action.type) {
@@ -76,7 +65,7 @@ export const taskReducer = (state: TasksTypeObject = initialState, action: actio
             return ({...state})
         }
         case 'EDITABLE-TASK-TITLE': {
-           let todoListTask = state[action.idTodoList];
+            let todoListTask = state[action.idTodoList];
             state[action.idTodoList] = todoListTask
                 .map(t => t.id === action.idTask
                     ? {...t, title: action.title}

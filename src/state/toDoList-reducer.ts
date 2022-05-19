@@ -22,16 +22,17 @@ type EditTitleTodoListActionType = {
     id: string,
     value: string
 }
-type ActionTypes = AddTodoListActionType | DeleteTodoListActionType | ChangeFilterActionType | EditTitleTodoListActionType
+type ActionTypes =
+    AddTodoListActionType
+    | DeleteTodoListActionType
+    | ChangeFilterActionType
+    | EditTitleTodoListActionType
 
 
 export const idTodoList_1: string = v1();
 export const idTodoList_2: string = v1();
 
-const initialState:Array<TodoListType> = [
-    {id: idTodoList_1, task: 'What to learn', filter: 'All'},
-    {id: idTodoList_2, task: 'My project', filter: 'All'},
-];
+const initialState: Array<TodoListType> = [];
 
 //Reducer должын вернуть такой же тип какой и получил
 export const toDoListReducer = (state: Array<TodoListType> = initialState, action: ActionTypes): Array<TodoListType> => {
@@ -69,27 +70,27 @@ export const toDoListReducer = (state: Array<TodoListType> = initialState, actio
 }
 
 /** action creator - AC*/
-export const addTodoListAC = (value: string):AddTodoListActionType => {
+export const addTodoListAC = (value: string): AddTodoListActionType => {
     return {
-        type:'ADD-TODO-LIST',
+        type: 'ADD-TODO-LIST',
         title: value,
         idTodoList: v1()
     }
 }
-export const deleteTodoListAC = (id: string):DeleteTodoListActionType => {
+export const deleteTodoListAC = (id: string): DeleteTodoListActionType => {
     return {
-        type:  'DELETE-TODO-LIST',
+        type: 'DELETE-TODO-LIST',
         id: id
     }
 }
-export const changeFilterAC = (id: string, value:FilterValueType):ChangeFilterActionType => {
+export const changeFilterAC = (id: string, value: FilterValueType): ChangeFilterActionType => {
     return {
         type: 'CHANGE-FILTER',
         id: id,
         value: value
     }
 }
-export const editTitleTodoListAC = (id: string, value: string):EditTitleTodoListActionType  => {
+export const editTitleTodoListAC = (id: string, value: string): EditTitleTodoListActionType => {
     return {
         type: 'EDIT_TITLE_TODO_LIST',
         id: id,
