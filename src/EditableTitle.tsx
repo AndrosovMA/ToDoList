@@ -6,7 +6,9 @@ type EditableTitleProps = {
     editableTitleValue: (value: string) => void
 }
 
-export function EditableTitle(props: EditableTitleProps) {
+export const EditableTitle = React.memo((props: EditableTitleProps) => {
+    console.log('Editable Title')
+
     const [editMode, setEditMode] = useState(false);
     const [editTitle, setEditTitle] = useState('');
 
@@ -39,4 +41,4 @@ export function EditableTitle(props: EditableTitleProps) {
                 : <span onDoubleClick={turnOnSpanHandler}>{props.title}</span>}
         </>
     )
-}
+});

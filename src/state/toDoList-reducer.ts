@@ -23,7 +23,7 @@ type EditTitleTodoListActionType = {
     value: string
 }
 type ActionTypes =
-    AddTodoListActionType
+    | AddTodoListActionType
     | DeleteTodoListActionType
     | ChangeFilterActionType
     | EditTitleTodoListActionType

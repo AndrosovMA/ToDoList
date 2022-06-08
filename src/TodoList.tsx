@@ -21,9 +21,12 @@ type PropsType = {
 }
 
 export const TodoList = React.memo((props: PropsType) => {
+    console.log('Todolist called');
+
     const {id, taskName, changeFilter, filter, deleteTodoList, editableTitleHeaderHandler} = props;
 
     const dispatch = useDispatch();
+
     const tasks = useSelector<AppStateType, TasksTypeObject>((state) => state.taskReducer)
 
     const allClickHandler = useCallback(() => {
@@ -37,16 +40,17 @@ export const TodoList = React.memo((props: PropsType) => {
     }, [changeFilter, id]);
     const handlerDeleteTodoList = useCallback(() => {
         deleteTodoList(id)
-    }, [deleteTodoList, id]);
+    }, []);
     const addTask = useCallback((title: string) => {
         const action = addTaskAC(id, title)
         dispatch(action);
-    }, [dispatch, id])
+    }, [id])
     const editableTitleHeader = useCallback((value: string) => {
         editableTitleHeaderHandler(id, value);
     }, [editableTitleHeaderHandler, id])
 
     let tasksForTodoList: TasksType = tasks[id];
+
     if (filter === 'Active') {
         tasksForTodoList = tasks[id].filter((el: any) => !el.isDone);
     }
