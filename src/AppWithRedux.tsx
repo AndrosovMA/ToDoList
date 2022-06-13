@@ -1,32 +1,43 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {TodoList} from "./TodoList";
 import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from '@mui/icons-material';
-import {addTodoListAC, changeFilterAC, deleteTodoListAC, editTitleTodoListAC} from "./state/toDoList-reducer";
+import {
+    addTodoListAC, changeFilterAC, deleteTodoListAC,
+    editTitleTodoListAC, fetchTodoListTC, FilterValuesType
+} from "./state/toDoList-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./state/store";
+import {TodoListType} from "./api/todolist-api";
+import { ThunkDispatch } from "redux-thunk";
+import { AnyAction } from "redux";
+import {TaskType} from "./api/tasks-api";
 
-export type TaskType = {
-    id: string,
-    title: string,
-    isDone: boolean,
+
+export type DispatchType  = ThunkDispatch<AppStateType, unknown, AnyAction>
+export type TodolistDomainType = TodoListType & {
+    filter: FilterValuesType
 }
+
 export type TasksType = Array<TaskType>;
 export type TasksTypeObject = {
     [idTodoList: string]: TasksType
 }
-export type FilterValueType = "All" | "Active" | "Completed";
-export type TodoListType = {
-    id: string,
-    task: string,
-    filter: FilterValueType
-}
+
+
 
 function AppWithRedux() {
-    const dispatch = useDispatch();
-    const todoLists = useSelector<AppStateType, Array<TodoListType>>((state) => state.toDoListReducer);
+    const dispatch:DispatchType = useDispatch();
+
+    const todoLists = useSelector<AppStateType, Array<TodolistDomainType>>((state) => state.toDoListReducer);
+    const tasks = useSelector<AppStateType, TasksTypeObject>((state) => state.taskReducer)
+
+    useEffect(() => {
+        dispatch(fetchTodoListTC())
+    },[dispatch])
+
     const addTodoList = useCallback((title: string) => {
         const action = addTodoListAC(title);
         dispatch(action);
@@ -34,15 +45,15 @@ function AppWithRedux() {
     const deleteTodoList = useCallback((id: string) => {
         const action = deleteTodoListAC(id);
         dispatch(action);
-    }, []);
-    const changeFilter = useCallback((value: FilterValueType, id: string) => {
+    }, [dispatch]);
+    const changeFilter = useCallback((value: FilterValuesType, id: string) => {
         const action = changeFilterAC(id, value);
         dispatch(action);
-    }, [])
+    }, [dispatch])
     const editableTitleHeaderHandler = useCallback((idTodoList: string, value: string) => {
         const action = editTitleTodoListAC(idTodoList, value);
         dispatch(action);
-    }, []);
+    }, [dispatch]);
 
     return (
         <div className="App">
@@ -72,7 +83,7 @@ function AppWithRedux() {
 
                     <div>
                         <div><h3>Create new to do list</h3></div>
-                        <AddItemForm addItem={addTodoList}/>
+                        <AddItemForm addItem={addTodoList} labelName='todolist'/>
                     </div>
                 </Grid>
                 {/**render todoLists*/}
@@ -80,13 +91,15 @@ function AppWithRedux() {
 
                     {
                         todoLists.map((el) => {
+                            let allTodolistTasks = tasks[el.id];
 
                             return (
                                 <Grid item key={el.id}>
                                     <Paper elevation={3} style={{padding: "20px"}}>
                                         <TodoList
-                                            id={el.id}
-                                            taskName={el.task}
+                                            todoListId={el.id}
+                                            taskName={el.title}
+                                            tasks={allTodolistTasks}
                                             changeFilter={changeFilter}
                                             filter={el.filter}
                                             deleteTodoList={deleteTodoList}

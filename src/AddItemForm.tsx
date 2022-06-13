@@ -4,16 +4,17 @@ import {AddCircleOutline} from "@mui/icons-material";
 
 type PropsItemFormType = {
     addItem: (title: string) => void
+    labelName: string
 }
 
-export const AddItemForm = React.memo((props: PropsItemFormType) => {
-
+export const AddItemForm = React.memo(({addItem, labelName}: PropsItemFormType) => {
         const [errorInput, setErrorInput] = useState<null | string>(null);
         const [newTaskTittle, setNewTaskTittle] = useState('');
 
         const inputTextHandler = useCallback((e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
             setNewTaskTittle(e.currentTarget.value);
         }, [setNewTaskTittle]);
+
         const addTaskByEnter = useCallback((e: React.KeyboardEvent) => {
             if (errorInput !== null) {
                 setErrorInput(null)
@@ -23,24 +24,25 @@ export const AddItemForm = React.memo((props: PropsItemFormType) => {
                     setErrorInput('error')
                     return
                 }
-                props.addItem(newTaskTittle.trim());
+                addItem(newTaskTittle.trim());
                 setNewTaskTittle('')
             }
-        }, [props, errorInput, newTaskTittle]);
+        }, [addItem, errorInput, newTaskTittle]);
+
         const addTaskByButton = useCallback(() => {
             if (newTaskTittle.trim() === '') {
                 setErrorInput('error')
                 return
             }
-            props.addItem(newTaskTittle.trim());
+            addItem(newTaskTittle.trim());
             setNewTaskTittle('')
-        }, [props, newTaskTittle])
+        }, [addItem, newTaskTittle])
 
         return (
             <div>
                 <TextField
                     id="standard-basic"
-                    label="Add task"
+                    label={`Add ${labelName}`}
                     variant="outlined"
                     error={!!errorInput}
                     value={newTaskTittle}

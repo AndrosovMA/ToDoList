@@ -6,26 +6,27 @@ type EditableTitleProps = {
     editableTitleValue: (value: string) => void
 }
 
-export const EditableTitle = React.memo((props: EditableTitleProps) => {
-    console.log('Editable Title')
+export const EditableTitle = React.memo(({title, editableTitleValue}: EditableTitleProps) => {
+
 
     const [editMode, setEditMode] = useState(false);
     const [editTitle, setEditTitle] = useState('');
 
     const turnOnSpanHandler = () => {
         setEditMode(!editMode);
-        setEditTitle(props.title);
+        setEditTitle(title);
     }
-    const turnOfInputHandler = () => {
+
+    const turnOffInputHandler = () => {
         setEditMode(!editMode);
-        props.editableTitleValue(editTitle);
+        editableTitleValue(editTitle);
     }
-    const turnOfByEnterInputHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const turnOffInputHandlerByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            turnOfInputHandler();
+            turnOffInputHandler();
         }
     }
-    const inputHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const inputHandlerText = (e: ChangeEvent<HTMLInputElement>) => {
         let changedValue = e.currentTarget.value;
         setEditTitle(changedValue);
     }
@@ -34,11 +35,11 @@ export const EditableTitle = React.memo((props: EditableTitleProps) => {
         <>
             {editMode
                 ? <Input value={editTitle}
-                         onBlur={turnOfInputHandler}
+                         onBlur={turnOffInputHandler}
                          autoFocus={true}
-                         onChange={inputHandler}
-                         onKeyPress={turnOfByEnterInputHandler}/>
-                : <span onDoubleClick={turnOnSpanHandler}>{props.title}</span>}
+                         onChange={inputHandlerText}
+                         onKeyPress={turnOffInputHandlerByEnter}/>
+                : <span onDoubleClick={turnOnSpanHandler}>{title}</span>}
         </>
     )
 });

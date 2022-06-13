@@ -1,38 +1,44 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {useDispatch} from "react-redux";
-import {changeStatusTaskAC, editableTitleTaskAC, removeTaskAC} from "./state/task-reducer";
+import {changeStatusTaskAC, deleteTaskTC, editableTitleTaskAC} from "./state/task-reducer";
 import {Checkbox, IconButton} from "@mui/material";
 import {Bookmark, BookmarkBorder, Delete} from "@mui/icons-material";
 import {EditableTitle} from "./EditableTitle";
+import {TaskStatuses, TaskType} from "./api/tasks-api";
+import {DispatchType} from "./AppWithRedux";
+
 
 const label = {inputProps: {'aria-label': 'Checkbox demo'}};
 
-type TaskType = {
-    idTodoList: string
+type TaskPropsType = {
+    todoListId: string
+    task: TaskType
     idTask: string
-    isDone: boolean
     title: string
 }
-export const Task = React.memo(({idTodoList, idTask, isDone, title}: TaskType) => {
-    console.log('Task called')
 
-    const dispatch = useDispatch();
+export const Task = React.memo(({todoListId, task, idTask, title}: TaskPropsType) => {
+    const dispatch: DispatchType = useDispatch();
+
     const onRemoveTask = useCallback(() => {
-        const action = removeTaskAC(idTodoList, idTask);
-        dispatch(action);
-    }, [dispatch, idTodoList, idTask]);
+        const thunk = deleteTaskTC(todoListId, idTask);
+        dispatch(thunk);
+    }, [dispatch, todoListId, idTask]);
+
     const onChangeCheckbox = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-        const action = changeStatusTaskAC(idTodoList, idTask, e.currentTarget.checked);
+        // console.log(todoListId, 'Task - ', idTask)
+        const action = changeStatusTaskAC(todoListId, idTask, e.currentTarget.checked);
         dispatch(action);
-    }, [dispatch, idTodoList, idTask]);
+    }, [dispatch, todoListId, idTask]);
+
     const editableTitleTask = useCallback((value: string) => {
-        const action = editableTitleTaskAC(idTodoList, idTask, value);
+        const action = editableTitleTaskAC(todoListId, idTask, value);
         dispatch(action);
-    }, [dispatch, idTodoList, idTask]);
+    }, [dispatch, todoListId, idTask]);
 
     return (
         <li key={idTask}>
-            <Checkbox {...label} checked={isDone}
+            <Checkbox {...label} checked={task.status === TaskStatuses.Completed}
                       onChange={onChangeCheckbox}
                       icon={<BookmarkBorder/>}
                       checkedIcon={<Bookmark/>}/>
