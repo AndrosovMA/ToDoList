@@ -27,16 +27,16 @@ export const todolistAPI = {
             return instance.get<TodoListType[]>('todo-lists');
         },
 
-        createTodoList(data:any) {
-            return instance.post<ResponseTodoListType<{item: TodoListType}>>('todo-lists', data)
+        createTodoList(title:any) {
+            return instance.post<ResponseTodoListType<{item: TodoListType}>>('todo-lists', title)
         },
 
         deleteTodoList(idTodoList: any) {
             return instance.delete<ResponseTodoListType<{}>>(`todo-lists/${idTodoList}`)
         },
 
-        updateTodoList(p:{idTodoList: any, newTitle: any}) {
-            return instance.put<ResponseTodoListType<{}>>(`todo-lists/${p.idTodoList}`, p.newTitle)
+        editTittleTodoList(idTodoList: any, title: any) {
+            return instance.put<ResponseTodoListType<{}>>(`todo-lists/${idTodoList}`, title)
         }
 }
 

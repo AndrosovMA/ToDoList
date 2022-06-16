@@ -1,7 +1,7 @@
 import {v1} from "uuid";
 // import {
 //     addTaskAC,
-//     changeStatusTaskAC,
+//     changeTaskStatusAC,
 //     editableTitleTaskAC,
 //     editableTitleTaskType,
 //     removeTaskAC,
@@ -51,7 +51,7 @@ import {v1} from "uuid";
 // });
 // test('task should be change status', () => {
 //
-//     const action = changeStatusTaskAC(idTodoList1, '3', false);
+//     const action = changeTaskStatusAC(idTodoList1, '3', false);
 //     const endState = taskReducer(startState, action)
 //
 //     expect(endState[idTodoList1][2].isDone).toBe(false);

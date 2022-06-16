@@ -15,7 +15,7 @@ export const AddItemForm = React.memo(({addItem, labelName}: PropsItemFormType) 
             setNewTaskTittle(e.currentTarget.value);
         }, [setNewTaskTittle]);
 
-        const addTaskByEnter = useCallback((e: React.KeyboardEvent) => {
+        const addItemByEnter = useCallback((e: React.KeyboardEvent) => {
             if (errorInput !== null) {
                 setErrorInput(null)
             }
@@ -29,7 +29,7 @@ export const AddItemForm = React.memo(({addItem, labelName}: PropsItemFormType) 
             }
         }, [addItem, errorInput, newTaskTittle]);
 
-        const addTaskByButton = useCallback(() => {
+        const addItemByButton = useCallback(() => {
             if (newTaskTittle.trim() === '') {
                 setErrorInput('error')
                 return
@@ -47,9 +47,9 @@ export const AddItemForm = React.memo(({addItem, labelName}: PropsItemFormType) 
                     error={!!errorInput}
                     value={newTaskTittle}
                     onChange={inputTextHandler}
-                    onKeyPress={addTaskByEnter}
+                    onKeyPress={addItemByEnter}
                 />
-                <IconButton aria-label="delete" onClick={addTaskByButton} color="primary" size="small">
+                <IconButton aria-label="delete" onClick={addItemByButton} color="primary" size="small">
                     <AddCircleOutline/>
                 </IconButton>
                 {errorInput && <div className="error_message">tittle is required</div>}

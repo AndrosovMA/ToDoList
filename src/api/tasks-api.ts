@@ -45,6 +45,16 @@ type ResponseTaskType<D> = {
     data: D
 }
 
+export type UpdateTaskModelType = {
+    title: string,
+    description: string,
+    completed: boolean,
+    status: TaskStatuses,
+    priority: TodoTaskPriorities,
+    startDate: string,
+    deadline: string
+}
+
 export const taskAPI = {
     getTasks(idTodoList: string) {
         return  instance.get<GetTaskType>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks`)
@@ -58,8 +68,8 @@ export const taskAPI = {
         return instance.delete<ResponseTaskType<{}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks/${idTask}`)
     },
 
-    updateTask(idTodoList: string, idTask: string, newTitle:{ title: string} ) {
-        return instance.put<ResponseTaskType<{title: string}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks/${idTask}`, newTitle)
+    updateTask(idTodoList: string, idTask: string, model: UpdateTaskModelType ) {
+        return instance.put<ResponseTaskType<TaskType>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks/${idTask}`, model)
     }
 }
 

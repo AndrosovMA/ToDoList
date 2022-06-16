@@ -1,5 +1,5 @@
 import {v1} from "uuid";
-// import {addTodoListAC, deleteTodoListAC, toDoListReducer} from "./toDoList-reducer";
+// import {createTodoListAC, deleteTodoListAC, toDoListReducer} from "./toDoList-reducer";
 // import {TasksTypeObject, TodoListType} from "../App";
 // import {taskReducer} from "./task-reducer";
 //
@@ -24,7 +24,7 @@ test('new array should be added when new todolist is added', () => {
 //         ],
 //     }
 //
-//     const action = addTodoListAC('CSS')
+//     const action = createTodoListAC('CSS')
 //     const endState_todoList = toDoListReducer(startState_todoList, action)
 //     const endState_task =  taskReducer(startState_task, action)
 //

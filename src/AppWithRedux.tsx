@@ -5,8 +5,8 @@ import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from '@mui/icons-material';
 import {
-    addTodoListAC, changeFilterAC, deleteTodoListAC,
-    editTitleTodoListAC, fetchTodoListTC, FilterValuesType
+    changeFilterAC, deleteTodoListTC,
+    editTitleTodoListAC, fetchTodoListTC, FilterValuesType, createTodoListTC, editTittleTodoListTC
 } from "./state/toDoList-reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./state/store";
@@ -36,23 +36,24 @@ function AppWithRedux() {
 
     useEffect(() => {
         dispatch(fetchTodoListTC())
-    },[dispatch])
+    },[dispatch]);
 
     const addTodoList = useCallback((title: string) => {
-        const action = addTodoListAC(title);
-        dispatch(action);
+        dispatch(createTodoListTC(title));
     }, [dispatch]);
+
     const deleteTodoList = useCallback((id: string) => {
-        const action = deleteTodoListAC(id);
-        dispatch(action);
+        const thunk = deleteTodoListTC(id)
+        dispatch(thunk)
     }, [dispatch]);
+
     const changeFilter = useCallback((value: FilterValuesType, id: string) => {
         const action = changeFilterAC(id, value);
         dispatch(action);
     }, [dispatch])
-    const editableTitleHeaderHandler = useCallback((idTodoList: string, value: string) => {
-        const action = editTitleTodoListAC(idTodoList, value);
-        dispatch(action);
+
+    const editableTitleHeaderHandler = useCallback((idTodoList: string, newTitle: string) => {
+        dispatch(editTittleTodoListTC(idTodoList, newTitle));
     }, [dispatch]);
 
     return (

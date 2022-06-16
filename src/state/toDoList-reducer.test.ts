@@ -1,6 +1,6 @@
 import {v1} from "uuid";
 import {
-    addTodoListAC,
+    createTodoListAC,
     changeFilterAC,
     deleteTodoListAC,
     editTitleTodoListAC,
@@ -29,7 +29,7 @@ import {
 //
 // test('todo list should be added', () => {
 //
-//     const endState = toDoListReducer(startState, addTodoListAC(newTodoListTitle))
+//     const endState = toDoListReducer(startState, createTodoListAC(newTodoListTitle))
 //
 //     expect(endState.length).toBe(3);
 //     expect(endState[0].task).toBe(newTodoListTitle);
