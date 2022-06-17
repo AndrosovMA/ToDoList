@@ -1,16 +1,14 @@
 import React, {useCallback, useEffect} from "react";
-import {DispatchType} from "./AppWithRedux";
-import {AddItemForm} from "./AddItemForm";
-import {EditableTitle} from "./EditableTitle";
-
-/** Material UI*/
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableTitle} from "../../../components/EditableTitle/EditableTitle";
 import {Button, IconButton} from "@mui/material";
 import {DeleteForever} from '@mui/icons-material';
 import {useDispatch} from "react-redux";
-import {addTaskTC, fetchTasksTC, updateTaskTC} from "./state/task-reducer";
-import {Task} from "./Task";
-import {FilterValuesType} from "./state/toDoList-reducer";
-import {TaskStatuses, TaskType} from "./api/tasks-api";
+import {addTaskTC, fetchTasksTC, updateTaskTC} from "../../../state/task-reducer";
+import {Task} from "./Task/Task";
+import {FilterValuesType} from "../../../state/toDoList-reducer";
+import {TaskStatuses, TaskType} from "../../../api/tasks-api";
+import {DispatchType} from "../TodoListsList";
 
 type PropsType = {
     todoListId: string
@@ -19,11 +17,11 @@ type PropsType = {
     changeFilter: (value: FilterValuesType, id: string) => void
     filter: FilterValuesType
     deleteTodoList: (id: string) => void
-    editableTitleHeaderHandler: (idTodoList: string, value: string) => void
+    changeTitleTodolist: (idTodoList: string, value: string) => void
 }
 
 export const TodoList = React.memo((props: PropsType) => {
-    const {todoListId, taskName, tasks, changeFilter, filter, deleteTodoList, editableTitleHeaderHandler} = props;
+    const {todoListId, taskName, tasks, changeFilter, filter, deleteTodoList, changeTitleTodolist} = props;
 
     const dispatch: DispatchType = useDispatch();
 
@@ -48,9 +46,9 @@ export const TodoList = React.memo((props: PropsType) => {
         const thunk = addTaskTC(todoListId, title);
         dispatch(thunk);
     }, [dispatch, todoListId])
-    const editableTitleHeader = useCallback((newTitle: string) => {
-        editableTitleHeaderHandler(todoListId, newTitle);
-    }, [editableTitleHeaderHandler, todoListId])
+    const editableTitleTodoList = useCallback((newTitle: string) => {
+        changeTitleTodolist(todoListId, newTitle);
+    }, [changeTitleTodolist, todoListId])
     const changeTaskStatus = useCallback((todoListId: string, idTask: string, newStatus: TaskStatuses) => {
         const thunk = updateTaskTC(todoListId, idTask, {status: newStatus});
         dispatch(thunk);
@@ -71,7 +69,7 @@ export const TodoList = React.memo((props: PropsType) => {
             {/**Title to do list*/}
             <h3>
                 <EditableTitle title={taskName}
-                               editableTitleValue={editableTitleHeader}
+                               editableTitleValue={editableTitleTodoList}
                 />
                 <IconButton aria-label="delete" onClick={handlerDeleteTodoList} color="primary">
                     <DeleteForever/>

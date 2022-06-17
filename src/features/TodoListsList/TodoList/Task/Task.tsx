@@ -1,11 +1,11 @@
 import React, {ChangeEvent, useCallback} from "react";
 import {useDispatch} from "react-redux";
-import {deleteTaskTC, editableTitleTaskAC, updateTaskTC} from "./state/task-reducer";
+import {deleteTaskTC, updateTaskTC} from "../../../../state/task-reducer";
 import {Checkbox, IconButton} from "@mui/material";
 import {Bookmark, BookmarkBorder, Delete} from "@mui/icons-material";
-import {EditableTitle} from "./EditableTitle";
-import {TaskStatuses, TaskType} from "./api/tasks-api";
-import {DispatchType} from "./AppWithRedux";
+import {EditableTitle} from "../../../../components/EditableTitle/EditableTitle";
+import {TaskStatuses, TaskType} from "../../../../api/tasks-api";
+import {DispatchType} from "../../TodoListsList";
 
 
 const label = {inputProps: {'aria-label': 'Checkbox demo'}};

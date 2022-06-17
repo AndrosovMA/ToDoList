@@ -21,6 +21,25 @@ export enum TodoTaskPriorities {
     Draft = 3
 }
 
+export const taskAPI = {
+    getTasks(idTodoList: string) {
+        return  instance.get<GetTaskType>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks`)
+    },
+
+    createTask(idTodoList: string, params: {title: string}) {
+        return instance.post<ResponseTaskType<{item: TaskType}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks`, params)
+    },
+
+    deleteTask(idTodoList: string, idTask: string) {
+        return instance.delete<ResponseTaskType<{}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks/${idTask}`)
+    },
+
+    updateTask(idTodoList: string, idTask: string, model: UpdateTaskModelType ) {
+        return instance.put<ResponseTaskType<TaskType>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks/${idTask}`, model)
+    }
+}
+
+// types
 export type TaskType = {
     description: string
     title: string
@@ -44,7 +63,6 @@ type ResponseTaskType<D> = {
     messages: string[],
     data: D
 }
-
 export type UpdateTaskModelType = {
     title: string,
     description: string,
@@ -54,25 +72,6 @@ export type UpdateTaskModelType = {
     startDate: string,
     deadline: string
 }
-
-export const taskAPI = {
-    getTasks(idTodoList: string) {
-        return  instance.get<GetTaskType>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks`)
-    },
-
-    createTask(idTodoList: string, params: {title: string}) {
-        return instance.post<ResponseTaskType<{item: TaskType}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks`, params)
-    },
-
-    deleteTask(idTodoList: string, idTask: string) {
-        return instance.delete<ResponseTaskType<{}>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks/${idTask}`)
-    },
-
-    updateTask(idTodoList: string, idTask: string, model: UpdateTaskModelType ) {
-        return instance.put<ResponseTaskType<TaskType>>(`https://social-network.samuraijs.com/api/1.1/todo-lists/${idTodoList}/tasks/${idTask}`, model)
-    }
-}
-
 
 
 

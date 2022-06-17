@@ -1,12 +1,4 @@
 import {v1} from "uuid";
-import {
-    createTodoListAC,
-    changeFilterAC,
-    deleteTodoListAC,
-    editTitleTodoListAC,
-    toDoListReducer
-} from "./toDoList-reducer";
-
 
 
 //
@@ -27,7 +19,7 @@ import {
 //     ];
 // })
 //
-// test('todo list should be added', () => {
+test('todo list should be added', () => {
 //
 //     const endState = toDoListReducer(startState, createTodoListAC(newTodoListTitle))
 //
@@ -35,7 +27,7 @@ import {
 //     expect(endState[0].task).toBe(newTodoListTitle);
 //     expect(endState[0].filter).toBe('All');
 //
-// })
+})
 // test('todo list should be delete', () => {
 //
 //     const endState = toDoListReducer(startState, deleteTodoListAC(idTodoList_1))
@@ -57,7 +49,7 @@ import {
 //     let newTitle = 'learn Hook'
 //
 //
-//     const endState = toDoListReducer(startState, editTitleTodoListAC(idTodoList_2, newTitle))
+//     const endState = toDoListReducer(startState, changeTitleTodoListAC(idTodoList_2, newTitle))
 //
 //     expect(endState[1].task).toBe(newTitle);
 // })
