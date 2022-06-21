@@ -9,23 +9,17 @@ import {Task} from "./Task/Task";
 import {FilterValuesType} from "../../../state/toDoList-reducer";
 import {TaskStatuses, TaskType} from "../../../api/tasks-api";
 import {DispatchType} from "../TodoListsList";
-
-type PropsType = {
-    todoListId: string
-    taskName: string
-    tasks: TaskType[]
-    changeFilter: (value: FilterValuesType, id: string) => void
-    filter: FilterValuesType
-    deleteTodoList: (id: string) => void
-    changeTitleTodolist: (idTodoList: string, value: string) => void
-}
+import {RequestStatusType} from "../../../state/app-reducer";
 
 export const TodoList = React.memo((props: PropsType) => {
-    const {todoListId, taskName, tasks, changeFilter, filter, deleteTodoList, changeTitleTodolist} = props;
+    const {
+        todoListId, taskName, tasks, changeFilter, filter,
+        status, deleteTodoList, changeTitleTodolist,
+    } = props;
 
     const dispatch: DispatchType = useDispatch();
 
-    useEffect(() => {
+       useEffect(() => {
         dispatch(fetchTasksTC(todoListId))
     }, [dispatch, todoListId])
 
@@ -54,7 +48,6 @@ export const TodoList = React.memo((props: PropsType) => {
         dispatch(thunk);
     }, [dispatch])
 
-
     let tasksForTodoList = tasks;
 
     if (filter === 'active') {
@@ -66,20 +59,21 @@ export const TodoList = React.memo((props: PropsType) => {
 
     return (
         <div>
-            {/**Title to do list*/}
+            {/*Title to do list*/}
             <h3>
                 <EditableTitle title={taskName}
                                editableTitleValue={editableTitleTodoList}
                 />
-                <IconButton aria-label="delete" onClick={handlerDeleteTodoList} color="primary">
+                <IconButton aria-label="delete" onClick={handlerDeleteTodoList} color="primary"
+                            disabled={status === 'loading'}>
                     <DeleteForever/>
                 </IconButton>
             </h3>
 
-            {/**Add new task*/}
+            {/*Add new task*/}
             <AddItemForm addItem={addTask} labelName='task'/>
 
-            {/**All tasks*/}
+            {/*All tasks*/}
             <ul>
                 {
                     tasksForTodoList.map((el) => {
@@ -95,7 +89,7 @@ export const TodoList = React.memo((props: PropsType) => {
                 }
             </ul>
 
-            {/**Buttons for filter tasks*/}
+            {/*Buttons for filter tasks*/}
             <div>
                 <Button color={"info"} variant={filter === 'all' ? 'contained' : 'text'}
                         onClick={allClickHandler}>All
@@ -112,3 +106,14 @@ export const TodoList = React.memo((props: PropsType) => {
     )
 })
 
+// types
+type PropsType = {
+    todoListId: string
+    taskName: string
+    tasks: TaskType[]
+    changeFilter: (value: FilterValuesType, id: string) => void
+    filter: FilterValuesType
+    status: RequestStatusType
+    deleteTodoList: (id: string) => void
+    changeTitleTodolist: (idTodoList: string, value: string) => void
+}

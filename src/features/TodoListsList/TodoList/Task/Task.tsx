@@ -7,16 +7,7 @@ import {EditableTitle} from "../../../../components/EditableTitle/EditableTitle"
 import {TaskStatuses, TaskType} from "../../../../api/tasks-api";
 import {DispatchType} from "../../TodoListsList";
 
-
 const label = {inputProps: {'aria-label': 'Checkbox demo'}};
-
-type TaskPropsType = {
-    todoListId: string
-    task: TaskType
-    idTask: string
-    title: string
-    changeTaskStatus: (todoListId: string, idTask: string, status: TaskStatuses) => void
-}
 
 export const Task = React.memo(({todoListId, task, idTask, title, changeTaskStatus}: TaskPropsType) => {
     const dispatch: DispatchType = useDispatch();
@@ -52,3 +43,13 @@ export const Task = React.memo(({todoListId, task, idTask, title, changeTaskStat
             </IconButton>
         </li>)
 })
+
+
+// types
+type TaskPropsType = {
+    todoListId: string
+    task: TaskType
+    idTask: string
+    title: string
+    changeTaskStatus: (todoListId: string, idTask: string, status: TaskStatuses) => void
+}

@@ -16,6 +16,7 @@ import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {TodoList} from "./TodoList/TodoList";
 import {TodoListType} from "../../api/todolist-api";
+import {RequestStatusType} from "../../state/app-reducer";
 
 export const TodoListsList = () => {
     const dispatch: DispatchType = useDispatch();
@@ -72,6 +73,7 @@ export const TodoListsList = () => {
                                         tasks={allTodolistTasks}
                                         changeFilter={changeFilter}
                                         filter={el.filter}
+                                        status={el.entityStatus}
                                         deleteTodoList={deleteTodoList}
                                         changeTitleTodolist={changeTitleTodolist}
                                     />
@@ -89,6 +91,7 @@ export const TodoListsList = () => {
 export type DispatchType = ThunkDispatch<AppStateType, unknown, AnyAction>
 export type TodolistDomainType = TodoListType & {
     filter: FilterValuesType
+    entityStatus: RequestStatusType
 }
 export type TasksType = Array<TaskType>;
 export type TasksTypeObject = {

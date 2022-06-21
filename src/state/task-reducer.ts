@@ -3,6 +3,7 @@ import {Dispatch} from "redux";
 import {taskAPI, TaskStatuses, TaskType, TodoTaskPriorities, UpdateTaskModelType} from "../api/tasks-api";
 import {AppStateType} from "./store";
 import {TasksTypeObject} from "../features/TodoListsList/TodoListsList";
+import {setErrorAppAC, SetErrorAppType, setStatusAppAC, SetStatusAppType} from "./app-reducer";
 
 const initialState: TasksTypeObject = {}
 
@@ -73,11 +74,14 @@ export const updateTaskAC = (todoListId: string, idTask: string, domainModel: Up
 
 // thunks
 export const fetchTasksTC = (todoListId: string) => {
-    return (dispatch: Dispatch<ActionTypes>) => {
+    return (dispatch: Dispatch<ActionTypes> & Dispatch<SetStatusAppType>) => {
+        dispatch(setStatusAppAC('loading'));
+
         taskAPI.getTasks(todoListId)
             .then((res) => {
                 const action = setTasksAC(todoListId, res.data.items);
                 dispatch(action);
+                dispatch(setStatusAppAC('succeeded' ));
             })
     }
 }
@@ -92,12 +96,21 @@ export const deleteTaskTC = (todoListId: string, idTask: string) => {
     }
 }
 
-export const addTaskTC = (todoListId: string, title: string) => {
+export const addTaskTC = (todoListId: string, title: string)     => {
     return (dispatch: Dispatch<ActionTypes>) => {
+
         taskAPI.createTask(todoListId, {title})
             .then((res) => {
-                const action = addTaskAC(res.data.data.item)
-                dispatch(action)
+               if (res.data.resultCode === 0) {
+                   const action = addTaskAC(res.data.data.item)
+                   dispatch(action)
+               } else {
+                   if (res.data.messages.length) {
+                       dispatch(setErrorAppAC(res.data.messages[0]));
+                   } else {
+                       dispatch(setErrorAppAC('some error'));
+                   }
+               }
             })
     }
 }
@@ -147,6 +160,7 @@ type ActionTypes =
     | AddTodoListActionType
     | DeleteTodoListActionType
     | SetTodoListActionType
+    | SetErrorAppType
 
 
 
